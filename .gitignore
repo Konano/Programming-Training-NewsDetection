@@ -1,4 +1,5 @@
 htm/
+htm_fail/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
