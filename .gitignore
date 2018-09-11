@@ -1,6 +1,6 @@
-htm/
-htm_fail/
 data/
+split/
+catched.txt
 dict.txt
 
 # Byte-compiled / optimized / DLL files

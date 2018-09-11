@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-11 00:47:45
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-11 21:20:17
+# @Last Modified time: 2018-09-12 00:00:50
 
 import urllib.request
 import re
@@ -15,7 +15,7 @@ import random
 maxlen = 1000
 total = 0
 file_size = 1000
-file_id = 7
+file_id = 18
 
 d = {}
 URL = []
@@ -50,14 +50,14 @@ def nextPage(content):
     return p.findall(content)
 
 if __name__ == '__main__':
-    dict_file = codecs.open('dict.txt','r','utf-8')
-    dict_log = dict_file.readlines()
-    dict_file.close()
-    for i in dict_log:
+    catched_file = codecs.open('catched.txt','r','utf-8')
+    catched_log = catched_file.readlines()
+    catched_file.close()
+    for i in catched_log:
         d[i] = True
     while len(URL) < maxlen:
         try:
-            content = getURLContent(random.choice(dict_log))
+            content = getURLContent(random.choice(catched_log))
         except:
             nothing = True
         else:
@@ -66,11 +66,11 @@ if __name__ == '__main__':
                     URL.append(i)
                     d[i] = True
 
-    dict_file = codecs.open('dict.txt','a','utf-8')
+    catched_file = codecs.open('catched.txt','a','utf-8')
     collect = []
     while URL:
         print("Now queue length is ", len(URL), "    Total ", total)
-        dict_file.write(URL[0]+'\n')
+        catched_file.write(URL[0]+'\n')
         try:
             content = getURLContent(URL[0])
         except:
@@ -97,4 +97,4 @@ if __name__ == '__main__':
                 print(URL[0])
         del URL[0]
         time.sleep(0.5)
-    dict_file.close()
+    catched_file.close()
