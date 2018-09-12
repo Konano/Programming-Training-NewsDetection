@@ -1,5 +1,5 @@
-data/
-split/
+*data/
+*split/
 catched.txt
 dict.txt
 

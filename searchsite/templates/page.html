@@ -1,9 +1,10 @@
 <html>
   <head>
     <title>
-      {{ title }}
+      新闻 - {{ title }}
     </title>
-    <link rel="stylesheet" href="./main.css">
+      {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'page.css' %}">
   </head>
   <body>
     <div class="nav">

@@ -95,7 +95,7 @@
 		color: #404040;
 	}
 	.relate-news .column-name{
-		margin-bottom:34px; 
+		margin-bottom:34px;
 	}
 	.relate-news-wap >li{
 		margin-bottom: 26px;
@@ -129,9 +129,9 @@
 		color: #B3B3B3;
 	}
 	.clearfix:after{
-		content: "."; 
-		display: block; 
-		height: 0; 
-		clear: both; 
+		content: ".";
+		display: block;
+		height: 0;
+		clear: both;
 		visibility: hidden;
 	}

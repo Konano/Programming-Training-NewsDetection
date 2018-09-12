@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-
-from . import index
+import django
+from . import settings
+from . import index, page
 
 urlpatterns = [
     url(r'^$', index.mainpage),
-    url(r'^page$', page.show),
+    url(r'^page_(\d+)$', page.show),
+    url(r'^static/(?P<path>.*)$',  django.views.static.serve,  {'document_root': settings.STATIC_ROOT})
 ]
