@@ -2,15 +2,15 @@
 # @Author: NanoApe
 # @Date:   2018-09-11 22:54:14
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-12 00:25:38
+# @Last Modified time: 2018-09-12 00:32:58
 
 import json
 import codecs
 import jieba
 import re
 
-data_file_start = 1
-data_file_end = 18
+data_file_start = 19
+data_file_end = 21
 file_size = 1000
 
 d = {}
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     news_id = (data_file_start-1) * file_size
     for file_id in range(data_file_start, data_file_end):
         print('Start split file', file_id)
-        data_file = codecs.open('data/date_'+str(file_id),'r','utf-8')
+        data_file = codecs.open('data/data_'+str(file_id),'r','utf-8')
         data = json.loads(data_file.read())
         data_file.close()
         file_d = []
@@ -59,7 +59,7 @@ if __name__ == '__main__':
             file_d.append(new_d)
             if news_id % 100 == 0:
                 save_d()
-        split_file = codecs.open('split/date_'+str(file_id),'w','utf-8')
+        split_file = codecs.open('split/data_'+str(file_id),'w','utf-8')
         split_file.write(json.dumps(file_d))
         split_file.close()
     # print(d)

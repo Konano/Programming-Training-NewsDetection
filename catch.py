@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-11 00:47:45
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-12 00:00:50
+# @Last Modified time: 2018-09-12 00:33:43
 
 import urllib.request
 import re
@@ -15,7 +15,7 @@ import random
 maxlen = 1000
 total = 0
 file_size = 1000
-file_id = 18
+file_id = 20
 
 d = {}
 URL = []
@@ -87,7 +87,7 @@ if __name__ == '__main__':
                     total += 1
                     if total % file_size == 0 and collect:
                         file_id += 1
-                        f = codecs.open('data/date_'+str(file_id),'w','utf-8')
+                        f = codecs.open('data/data_'+str(file_id),'w','utf-8')
                         f.write(json.dumps(collect))
                         f.close()
                         collect = []

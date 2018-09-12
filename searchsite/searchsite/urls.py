@@ -19,4 +19,5 @@ from . import index
 
 urlpatterns = [
     url(r'^$', index.mainpage),
+    url(r'^page$', page.show),
 ]
