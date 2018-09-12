@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-11 00:47:45
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-12 00:33:43
+# @Last Modified time: 2018-09-13 03:21:16
 
 import urllib.request
 import re
@@ -15,12 +15,10 @@ import random
 maxlen = 1000
 total = 0
 file_size = 1000
-file_id = 20
+file_id = 0
 
-d = {}
-URL = []
-# URL = ['http://www.xinhuanet.com/index.htm']
-# URL = ['http://www.xinhuanet.com/2018-05/22/c_1122870950.htm']
+catched_url = {}
+catched_title = {}
 
 def getURLContent(url):
     # print ("getURLContent: ", url)
@@ -50,27 +48,42 @@ def nextPage(content):
     return p.findall(content)
 
 if __name__ == '__main__':
-    catched_file = codecs.open('catched.txt','r','utf-8')
-    catched_log = catched_file.readlines()
-    catched_file.close()
-    for i in catched_log:
-        d[i] = True
-    while len(URL) < maxlen:
-        try:
-            content = getURLContent(random.choice(catched_log))
-        except:
-            nothing = True
-        else:
-            for i in nextPage(content):
-                if (i in d) == False and i.find('photo') == -1 and i.find('video') == -1:
-                    URL.append(i)
-                    d[i] = True
 
-    catched_file = codecs.open('catched.txt','a','utf-8')
+    # URL = []
+    URL = ['http://www.xinhuanet.com/index.htm']
+    # URL = ['http://www.xinhuanet.com/2018-05/22/c_1122870950.htm']
+
+    # catched_file = codecs.open('catched_url.txt','r','utf-8')
+    # catched_log = catched_file.readlines()
+    # catched_file.close()
+    # for i in catched_log:
+    #     catched_url[i] = True
+
+    # catched_file = codecs.open('catched_title.txt','r','utf-8')
+    # catched_log = catched_file.readlines()
+    # catched_file.close()
+    # for i in catched_log:
+    #     catched_title[i] = True
+
+    # while len(URL) < maxlen:
+    #     try:
+    #         content = getURLContent(random.choice(catched_log))
+    #     except:
+    #         nothing = True
+    #     else:
+    #         for i in nextPage(content):
+    #             if (i in catched_url) == False and i.find('photo') == -1 and i.find('video') == -1:
+    #                 URL.append(i)
+    #                 catched_url[i] = True
+
+    catched_url[URL[0]] = True
+
+    catched_url_file = codecs.open('catched_url.txt','a','utf-8')
+    catched_title_file = codecs.open('catched_title.txt','a','utf-8')
     collect = []
     while URL:
         print("Now queue length is ", len(URL), "    Total ", total)
-        catched_file.write(URL[0]+'\n')
+        catched_url_file.write(URL[0]+'\n')
         try:
             content = getURLContent(URL[0])
         except:
@@ -78,23 +91,27 @@ if __name__ == '__main__':
         else:
             try:
                 if len(URL) < maxlen:
-                    for i in nextPage(content):
-                        if (i in d) == False and i.find('photo') == -1 and i.find('video') == -1:
-                            URL.append(i)
-                            d[i] = True
+                    for url in nextPage(content):
+                        if (url in catched_url) == False and url.find('photo') == -1 and url.find('video') == -1:
+                            URL.append(url)
+                            catched_url[url] = True
                 if content.find('<div id="p-detail">') != -1:
-                    collect.append(extract(content))
-                    total += 1
-                    if total % file_size == 0 and collect:
-                        file_id += 1
-                        f = codecs.open('data/data_'+str(file_id),'w','utf-8')
-                        f.write(json.dumps(collect))
-                        f.close()
-                        collect = []
+                    news = extract(content)
+                    if (news['title']+news['time'][:10] in catched_title) == False:
+                        collect.append(news)
+                        total += 1
+                        catched_title[news['title']+news['time'][:10]] = True
+                        catched_title_file.write(news['title']+news['time'][:10]+'\n')
+                        if total % file_size == 0 and collect:
+                            file_id += 1
+                            f = codecs.open('data/data_'+str(file_id),'w','utf-8')
+                            f.write(json.dumps(collect))
+                            f.close()
+                            collect = []
                 else:
                     print(URL[0])
             except:
                 print(URL[0])
         del URL[0]
-        time.sleep(0.5)
+        # time.sleep(0.5)
     catched_file.close()

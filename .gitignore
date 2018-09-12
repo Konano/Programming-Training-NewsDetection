@@ -1,6 +1,6 @@
 *data/
 *split/
-catched.txt
+catched_*.txt
 dict.txt
 log/
 
