@@ -1,0 +1,27 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquoteth,td,input {margin:0;padding:0;}
+ol,ul,li {list-style-type:none;}
+body {font-family:"PingFang SC","Lantinghei SC","Helvetica Neue",Helvetica,Arial,"Microsoft YaHei",STHeitiSC-Light,simsun,"WenQuanYi Zen Hei","WenQuanYi Micro Hei",sans-serif;}
+.header,.main {width:1200px;margin:0 auto;}
+.nav {position:fixed;top:0;z-index:999;width:100%;height:46px;background-color:#393C44;}
+.header {margin-top:46px;margin-bottom:32px;width:1200px;display:block;background:url(./line.jpg) 0 100% no-repeat;padding-bottom:30px;}
+.h-news {float:left;width:100%;}
+.h-title {margin-top:30px;padding:0 20px;text-align:center;font-size:36px;color:#404040;font-weight:600;}
+.h-time {margin-right:20px;}
+.h-info {margin-top:10px;text-align:center;font-size:12px;color:#B3B3B3;}
+.main {position:relative;overflow:hidden;}
+.part {position:relative;}
+.p-left {margin-right:40px;width:130px;}
+.streamline-page .p-right {width:1030px;}
+#p-detail {margin:0 0 22px 0;font-size:18px;color:#404040;line-height:36px;}
+#p-detail p {margin-bottom:15px;}
+#p-detail:after {content:"";display:block;width:100%;height:8px;background-image:url(./line.jpg);}
+.column-name {position:relative;padding-left:16px;height:20px;font-size:20px;line-height:20px;color:#348CEC;font-weight:600;}
+.column-name:before {content:"";position:absolute;left:0;display:block;width:4px;height:100%;background-color:#348CEC;}
+.column-name span {color:#404040;}
+.relate-news .column-name {margin-bottom:34px;}
+.relate-news-wap >li {margin-bottom:26px;border-bottom:1px solid #E6E6E6;}
+.relate-news-wap a {display:block;margin-bottom:12px;font-size:20px;font-weight:600;color:#404040;text-decoration:none;}
+.r-des {font-size:15px;color:#808080;line-height:28px;height:42px;overflow:hidden;}
+.r-in {position:relative;margin:6px 0 12px;font-size:14px;color:#B3B3B3;}
+.r-dis {position:absolute;top:0;right:0;color:#B3B3B3;}
+.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}

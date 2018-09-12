@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 import django
 from . import settings
-from . import index, page
+from . import news, search
 
 urlpatterns = [
-    url(r'^$', index.mainpage),
-    url(r'^page_(\d+)$', page.show),
+    # url(r'^$', index.show_zero),
+    # url(r'^index$', index.show_zero),
+    # url(r'^index_(\d+)$', index.show),
+    url(r'^news/$', news.show),
+    url(r'^search/$', search.show),
     url(r'^static/(?P<path>.*)$',  django.views.static.serve,  {'document_root': settings.STATIC_ROOT})
 ]
