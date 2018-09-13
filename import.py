@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-11 22:54:14
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-13 23:48:44
+# @Last Modified time: 2018-09-14 00:48:24
 
 import os
 # os.environ.setdefault('DJANGO_SETTING_MODULE', 'NewsDetection.settings')
@@ -19,7 +19,7 @@ import re
 import time
 
 data_file_start = 1
-data_file_end = 1
+data_file_end = 10
 file_size = 1000
 
 def remove_punctuation(line):
@@ -38,6 +38,8 @@ if __name__ == '__main__':
     d = {}
     waitforadd = []
     news_id = (data_file_start-1) * file_size
+    total = 0
+    all_total = (data_file_end-data_file_start+1) * file_size
     for file_id in range(data_file_start, data_file_end+1):
         print('Start import file', file_id)
         data_file = codecs.open('data/data_'+str(file_id),'r','utf-8')
@@ -46,8 +48,9 @@ if __name__ == '__main__':
 
         for news in data:
             news_id += 1
-            if news_id > 10:
-                break
+            total += 1
+            if total % 100 == 0:
+                print(total, all_total, str(total/all_total*100)+'%')
             waitforadd.append(News(label=news_id))
 
             data_file = codecs.open('data/html_'+str(news_id),'w','utf-8')
