@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-12 22:13:47
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-13 12:04:40
+# @Last Modified time: 2018-09-13 12:12:08
 
 file_size = 1000
 page_show = 20
@@ -117,7 +117,7 @@ def page(request, search_word, page_num):
         file.close()
     except:
         result = search(search_word)
-    page_max = max(1, (20000-1) // page_show + 1)
+    page_max = max(1, (len(result)-1) // page_show + 1)
     if page_num > page_max:
         page_num = page_max
     if page_num < 1:
