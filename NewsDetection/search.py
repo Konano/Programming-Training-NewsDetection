@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-12 22:13:47
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-13 18:15:26
+# @Last Modified time: 2018-09-14 00:34:42
 
 page_show = 20
 
@@ -14,8 +14,7 @@ import codecs
 import json
 from urllib import parse
 
-from news.models import News
-from dict.models import Dict
+from dict.models import Word, News, Include
 
 def highlight(text, word_list):
     for word in word_list:
@@ -23,25 +22,21 @@ def highlight(text, word_list):
     return re.compile(r'[\s]').sub('',text)
 
 def search(search_word, search_word_list):
-    _result = {}
+    collect = []
     for word in search_word_list:
-        for item in Dict.objects.filter(word=word):
-            if item.news in _result:
-                _result[item.news]['times']  += item.times
-            else:
-                _result[item.news]            = {}
-                _result[item.news]['times']   = item.times
-                _result[item.news]['id']      = str(item.news)
+        try:
+            collect.extend(list(map(lambda x : x.label, Word.objects.get(name=word).news.all())))
+        except:
+            collect.extend([])
 
-    print('count completed, start to export')
-    result = []
-    for item in sorted(_result.items(), key=lambda item:item[1]['times'], reverse=True):
-        result.append(item[1]['id'])
+    tmp = list(set(collect))
+    count = list(map(lambda x : collect.count(x), tmp))
+    result = list(map(lambda x:x[0], sorted(list(map(lambda x,y:(x,y), tmp, count)), key=lambda x:x[1], reverse=True)))
+
     file = codecs.open('log/'+parse.quote_plus(search_word),'w','utf-8')
     file.write(json.dumps(result))
     file.close()
-    print('export completed')
-
+    print('search completed')
     return result
 
 def page(request, search_word, page_num):
@@ -55,6 +50,7 @@ def page(request, search_word, page_num):
         _file.close()
     except:
         result = search(search_word, search_word_list)
+
     page_max = max(1, (len(result)-1) // page_show + 1)
     if page_num > page_max:
         page_num = page_max
@@ -62,6 +58,7 @@ def page(request, search_word, page_num):
         page_num = 1
     news_start = (page_num-1) * page_show
     news_end   = min(len(result), page_num * page_show)
+
     context                      = {}
     context['search_text']       = search_word
     context['search_text_quote'] = parse.quote_plus(search_word)
@@ -71,15 +68,18 @@ def page(request, search_word, page_num):
     context['page_next']         = page_num + 1 if page_num != page_max else 0
     context['page_now']          = page_num
     context['page']              = range(max(1, page_num-5), min(page_max+1, page_num+5))
+
     for news_id in result[news_start:news_end]:
-        news = News.objects.get(label=news_id)
+        data_file = codecs.open('data/html_'+str(news_id),'r','utf-8')
+        news = json.loads(data_file.read())
+        data_file.close()
         context['result'].append({ \
             'id'      : str(news_id), \
-            'title'   : news.title, \
-            'time'    : news.time[:10], \
-            'preview' : highlight(news.text[:250],search_word_list)})
+            'title'   : news['title'], \
+            'time'    : news['time'][:10], \
+            'preview' : highlight(news['text'][:250],search_word_list)})
 
-    context['cost_time']         = time.time() - start
+    context['cost_time']= time.time() - start
     return render(request, 'search.html', context)
 
 def index(request, page_num):
@@ -90,27 +90,27 @@ def index(request, page_num):
         page_num = page_max
     if page_num < 1:
         page_num = 1
-    context                      = {}
-    context['result_total']      = news_total
-    context['result']            = []
-    context['page_pre']          = page_num - 1 if page_num != 1 else 0
-    context['page_next']         = page_num + 1 if page_num != page_max else 0
-    context['page_now']          = page_num
-    context['page']              = range(max(1, page_num-5), min(page_max+1, page_num+5))
+    context                 = {}
+    context['result_total'] = news_total
+    context['result']       = []
+    context['page_pre']     = page_num - 1 if page_num != 1 else 0
+    context['page_next']    = page_num + 1 if page_num != page_max else 0
+    context['page_now']     = page_num
+    context['page']         = range(max(1, page_num-5), min(page_max+1, page_num+5))
     news_start = (page_num-1) * page_show + 1
     news_end   = min(news_total, page_num * page_show)
     for news_id in range(news_start, news_end+1):
-        news = News.objects.get(label=news_id)
+        data_file = codecs.open('data/html_'+str(news_id),'r','utf-8')
+        news = json.loads(data_file.read())
+        data_file.close()
         context['result'].append({ \
             'id'      : str(news_id), \
-            'title'   : news.title, \
-            'time'    : news.time[:10], \
-            'preview' : highlight(news.text[:250],[])})
+            'title'   : news['title'], \
+            'time'    : news['time'][:10], \
+            'preview' : highlight(news['text'][:250],[])})
 
-    context['cost_time']         = time.time() - start
+    context['cost_time'] = time.time() - start
     return render(request, 'search_index.html', context)
-
-    _result[news_id]
 
 def show(request):
     if 'w' in request.GET:
