@@ -14,15 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.conf.urls.static import static
 import django
 from . import settings
 from . import page, search
 
 urlpatterns = [
-    # url(r'^$', index.show_zero),
-    # url(r'^index$', index.show_zero),
-    # url(r'^index_(\d+)$', index.show),
     url(r'^news/$', page.show),
     url(r'^search/$', search.show),
-    url(r'^static/(?P<path>.*)$',  django.views.static.serve,  {'document_root': settings.STATIC_ROOT})
 ]
