@@ -1,0 +1,95 @@
+<html>
+
+  <head>
+    <title>新闻搜索</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="../{% static 'search.css' %}"></head>
+
+  <body class="class1" marginheight="3" topmargin="3" id="gsr">
+    <div class="class2" id="searchform">
+      <form class="tsf nj" action="../search" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=''" role="search">
+        <div class="tsf-p">
+          <div class="sfibbbc" id="sbtc">
+            <div class="sbibod" id="sfdiv">
+              <button class="sbico-c" aria-label="搜索" id="mKlEF" type="submit">
+                <span class="sbico z1asCe MZy1Rb">
+                  <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                  </svg>
+                </span>
+              </button>
+              <div class="lst-c">
+                <div class="gstl_0 sbib_a" style="height: 44px;">
+                  <div class="sbib_b" id="sb_ifc0" dir="ltr">
+                    <div id="gs_lc0" style="position: relative;">
+                      <input class="gsfi" id="lst-ib" maxlength="2048" name="w" autocomplete="off" title="搜索" type="text" value="" aria-label="搜索" aria-haspopup="false" role="combobox" aria-autocomplete="list" dir="ltr" spellcheck="false" style="border: none; padding: 0px; margin: 0px; height: auto; width: 100%; position: absolute; z-index: 6; left: 0px; outline: none;" />
+                      <div class="gsfi" id="gs_sc0" style="background: transparent; color: transparent; padding: 0px; position: absolute; z-index: 2; white-space: pre; visibility: hidden;"></div>
+                      <input class="gsfi" disabled="" autocomplete="off" autocapitalize="off" aria-hidden="true" id="gs_taif0" dir="ltr" style="border: none; padding: 0px; margin: 0px; height: auto; width: 100%; position: absolute; z-index: 1; background-color: transparent; -webkit-text-fill-color: silver; color: silver; left: 0px;" />
+                      <input class="gsfi" disabled="" autocomplete="off" autocapitalize="off" aria-hidden="true" id="gs_htif0" dir="ltr" style="border: none; padding: 0px; margin: 0px; height: auto; width: 100%; position: absolute; z-index: 1; background-color: transparent; -webkit-text-fill-color: silver; color: silver; transition: all 0.218s ease 0s; opacity: 0; text-align: left; left: 0px;" /></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="sfbgx"></div>
+    <div id="main">
+      <div id="cnt" class="class2">
+        <div id="sform"></div>
+        <div class="ab_tnav_wrp" id="resultStats">共有 {{ result_total }} 条新闻
+          <nobr>（加载用时 {{ cost_time }} 秒）</nobr></div>
+        <div class="mw">
+          <div id="rcnt" style="clear:both;position:relative;zoom:1">
+            <div class="col" style="width:0">
+              <div id="center_col">
+                <div class="med" id="res">
+                  <div id="ires">
+                    <div class="srg">
+                      {% for item in result %}
+                      <div class="g">
+                          <div class="rc">
+                            <h3 class="r">
+                              <a href="../news?p={{ item.id }}" onmousedown="" target="_blank">{{ item.title }}</a></h3>
+                            <div class="s">
+                              <div>
+                                <span class="st">
+                                  <span class="f">{{ item.time }} -</span>
+                                  {% autoescape off %}
+                                  {{ item.preview|truncatechars_html:100 }}
+                                  {% endautoescape %}
+                                  </span></div>
+                            </div>
+                          </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div id="page">
+                  {% if page_pre != 0 %}
+                  <a href="../search?p={{ page_pre }}" class="n">&lt;上一页</a>
+                  {% endif %}
+
+                  {% for item in page %}
+                    {% if item != page_now %}
+                    <a href="../search?p={{ item }}">
+                      <span class="pc">{{ item }}</span></a>
+                    {% else %}
+                    <strong>
+                      <span class="pc">{{ item }}</span></strong>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if page_next != 0 %}
+                  <a href="../search?p={{ page_next }}" class="n">下一页&gt;</a>
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

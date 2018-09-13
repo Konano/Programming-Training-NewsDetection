@@ -2,10 +2,11 @@
 # @Author: NanoApe
 # @Date:   2018-09-12 22:13:47
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-13 02:38:32
+# @Last Modified time: 2018-09-13 11:53:33
 
 file_size = 1000
 page_show = 20
+news_total = 20000
 
 from django.shortcuts import render
 import codecs
@@ -98,6 +99,7 @@ def search(search_word):
     print('count completed, start to export')
     result = []
     for item in sorted(_result.items(), key=lambda item:item[1]['times'], reverse=True):
+        # print(item[1]['title'], item[1]['times'])
         result.append(item[1])
     # print(result)
     file = codecs.open('log/'+parse.quote_plus(search_word),'w','utf-8')
@@ -115,16 +117,13 @@ def page(request, search_word, page_num):
         file.close()
     except:
         result = search(search_word)
-    page_max = max(1, (len(result)-1) // page_show + 1)
+    page_max = max(1, (20000-1) // page_show + 1)
     if page_num > page_max:
         page_num = page_max
     if page_num < 1:
         page_num = 1
     news_start = (page_num-1) * page_show
     news_end   = min(len(result), page_num * page_show)
-
-    # print(page_num, page_max, news_start, news_end)
-
     context                      = {}
     context['search_text']       = search_word
     context['search_text_quote'] = parse.quote_plus(search_word)
@@ -137,10 +136,37 @@ def page(request, search_word, page_num):
     context['page']              = range(max(1, page_num-5), min(page_max+1, page_num+5))
     return render(request, 'search.html', context)
 
+def index(request, page_num):
+    start = time.time()
+    page_max = max(1, (news_total-1) // page_show + 1)
+    if page_num > page_max:
+        page_num = page_max
+    if page_num < 1:
+        page_num = 1
+    news_start = (page_num-1) * page_show
+    news_end   = min(news_total, page_num * page_show)
+    context                      = {}
+    context['result_total']      = news_total
+    context['cost_time']         = time.time() - start
+    context['result']            = []
+    context['page_pre']          = page_num - 1 if page_num != 1 else 0
+    context['page_next']         = page_num + 1 if page_num != page_max else 0
+    context['page_now']          = page_num
+    context['page']              = range(max(1, page_num-5), min(page_max+1, page_num+5))
+    for news_id in range(news_start+1, news_end+1):
+        context['result'].append({ \
+            'id'      : str(news_id), \
+            'title'   : get_title(news_id), \
+            'time'    : get_time(news_id)[:10], \
+            'preview' : highlight(get_preview(news_id),[])})
+    return render(request, 'search_index.html', context)
+
+    _result[news_id]
+
 def show(request):
-    search_word = parse.unquote_plus(request.GET.get('w',''))
-    page_num = request.GET.get('p','')
-    if search_word.isspace() == False:
+    if 'w' in request.GET:
+        search_word = parse.unquote_plus(request.GET['w'])
+        page_num = request.GET.get('p','')
         if page_num.isdigit() or page_num == '':
             if page_num == '':
                 page_num = 1
@@ -150,4 +176,12 @@ def show(request):
         else:
             return render("404.html", {})
     else:
-        return index(request)
+        page_num = request.GET.get('p','')
+        if page_num.isdigit() or page_num == '':
+            if page_num == '':
+                page_num = 1
+            else:
+                page_num = int(page_num)
+            return index(request, page_num)
+        else:
+            return render("404.html", {})
