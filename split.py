@@ -2,14 +2,14 @@
 # @Author: NanoApe
 # @Date:   2018-09-11 22:54:14
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-12 00:32:58
+# @Last Modified time: 2018-09-13 10:32:59
 
 import json
 import codecs
 import jieba
 import re
 
-data_file_start = 19
+data_file_start = 1
 data_file_end = 21
 file_size = 1000
 
@@ -29,9 +29,12 @@ def save_d():
     print('Save dict! Dict size:', len(d))
 
 if __name__ == '__main__':
-    d_file = codecs.open('dict.txt','r','utf-8')
-    d = json.loads(d_file.read())
-    d_file.close()
+    try:
+        d_file = codecs.open('dict.txt','r','utf-8')
+        d = json.loads(d_file.read())
+        d_file.close()
+    except:
+        d = {}
     # print(len(d))
     news_id = (data_file_start-1) * file_size
     for file_id in range(data_file_start, data_file_end):
@@ -42,11 +45,18 @@ if __name__ == '__main__':
         file_d = []
         for news in data:
             news_id += 1
-            seg_list = jieba.lcut_for_search(remove_punctuation(news['title']))
-            seg_list.extend(jieba.lcut_for_search(remove_punctuation(news['text'])))
-            # print(", ".join(seg_list))
             new_d = {}
-            for word in seg_list:
+            for word in jieba.lcut_for_search(remove_punctuation(news['title'])):
+                if word in new_d:
+                    new_d[word] += 10
+                else:
+                    new_d[word] = 10
+                if word in d:
+                    if d[word][-1] != news_id:
+                        d[word].append(news_id)
+                else:
+                    d[word] = [news_id]
+            for word in jieba.lcut_for_search(remove_punctuation(news['text'])):
                 if word in new_d:
                     new_d[word] += 1
                 else:
