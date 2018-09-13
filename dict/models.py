@@ -5,7 +5,7 @@ class Dict(models.Model):
     word = models.CharField(max_length=10)
     times = models.IntegerField()
 
-    def __unicode__(self):
-        return self.times
+    def __str__(self):
+        return str(self.times)
 
 # Create your models here.
