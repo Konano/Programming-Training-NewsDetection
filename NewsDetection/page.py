@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-12 09:48:09
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-14 01:44:16
+# @Last Modified time: 2018-09-14 11:04:29
 
 from django.shortcuts import render
 
@@ -13,7 +13,10 @@ import re
 
 def preview(text):
     text = re.compile(r'[\s]').sub('',text)
-    return text[:text.index('。')+1]
+    if '。' in text:
+        return text[:text.index('。')+1]
+    else:
+        return text[:min(len(text),50)]
 
 def show(request):
     news_id = request.GET.get('p','')
