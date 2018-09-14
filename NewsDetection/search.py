@@ -2,7 +2,7 @@
 # @Author: NanoApe
 # @Date:   2018-09-12 22:13:47
 # @Last Modified by:   NanoApe
-# @Last Modified time: 2018-09-14 00:34:42
+# @Last Modified time: 2018-09-14 09:54:40
 
 page_show = 20
 
@@ -63,6 +63,7 @@ def page(request, search_word, page_num):
     context['search_text']       = search_word
     context['search_text_quote'] = parse.quote_plus(search_word)
     context['result_total']      = len(result)
+    context['cost_time']         = time.time() - start
     context['result']            = []
     context['page_pre']          = page_num - 1 if page_num != 1 else 0
     context['page_next']         = page_num + 1 if page_num != page_max else 0
@@ -79,7 +80,6 @@ def page(request, search_word, page_num):
             'time'    : news['time'][:10], \
             'preview' : highlight(news['text'][:250],search_word_list)})
 
-    context['cost_time']= time.time() - start
     return render(request, 'search.html', context)
 
 def index(request, page_num):
@@ -92,6 +92,7 @@ def index(request, page_num):
         page_num = 1
     context                 = {}
     context['result_total'] = news_total
+    context['cost_time']    = time.time() - start
     context['result']       = []
     context['page_pre']     = page_num - 1 if page_num != 1 else 0
     context['page_next']    = page_num + 1 if page_num != page_max else 0
@@ -109,7 +110,6 @@ def index(request, page_num):
             'time'    : news['time'][:10], \
             'preview' : highlight(news['text'][:250],[])})
 
-    context['cost_time'] = time.time() - start
     return render(request, 'search_index.html', context)
 
 def show(request):
