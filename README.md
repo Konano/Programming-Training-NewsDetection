@@ -2,8 +2,6 @@
 
  📚  本次作业实现了一个新闻搜索引擎，包括了使用 Python 搜集网上的新闻和使用 Django 搭建网站服务器。
 
-
-
 ## Python 抓取新闻
 
 新闻全部来自[新华网](www.xinhuanet.com)。
@@ -15,8 +13,6 @@
 通过 bs4 分析 html 源码提取出标签内的信息，将正文储存在 `data` 文件夹内。
 
 通过 jieba 进行正文分词，得到「文章 - 词语」的关系，存入数据库。
-
-
 
 ## Django 网站服务器
 
@@ -36,8 +32,6 @@ urlpatterns = [
     url(r'^search/$', search.show),
 ]
 ```
-
-
 
 ### 搜索界面
 
@@ -61,8 +55,6 @@ URL:`/search/?p=xxx`
 
 和搜索界面一致，区别在于说搜索栏为空，且显示新闻数量为全部。
 
-
-
 ### 新闻详情
 
 URL:`/news/?p=xxx`
@@ -74,3 +66,15 @@ URL:`/news/?p=xxx`
 新闻底下的新闻推荐显示三条与新闻全文最为相关的其他新闻并提供链接跳转，由后端提前预处理计算完毕。
 
 界面 模板&CSS 由新华网提供（大雾
+
+## 编写环境
+
+IDE：Sublime Text
+
+System：Windows 10
+
+Requirements:
+
+- Python 3.6.3
+- Django 2.1.1
+- jieba 0.39
